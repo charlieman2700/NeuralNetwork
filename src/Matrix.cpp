@@ -22,9 +22,8 @@ Matrix::Matrix(int rows, int columns)
     this->data[rowIndex].resize(columns);
     for (int columnIndex = 0; columnIndex < columns; columnIndex++)
     {
-      //this->data[rowIndex][columnIndex] = -1 + (double)(rand()) / ((double)(RAND_MAX / (1 - -1)));
+      // this->data[rowIndex][columnIndex] = -1 + (double)(rand()) / ((double)(RAND_MAX / (1 - -1)));
       this->data[rowIndex][columnIndex] = 3;
-      
     }
   }
   this->rows = rows;
@@ -79,7 +78,7 @@ void Matrix::addMatrix(Matrix matrix)
 
 Matrix Matrix::matrixSubstract(Matrix m1, Matrix m2)
 {
-   Matrix temp = *new Matrix(m1.rows, m1.columns);
+  Matrix temp = *new Matrix(m1.rows, m1.columns);
   if (m1.columns != m2.columns || m1.rows != m2.rows)
   {
     cout << "The matrices have different shapes";
@@ -93,12 +92,11 @@ Matrix Matrix::matrixSubstract(Matrix m1, Matrix m2)
         temp.data[row][column] = m1.data[row][column] - m2.data[row][column];
       }
     }
-    
   }
   return temp;
 }
 
- Matrix Matrix::transpose(Matrix a)
+Matrix Matrix::transpose(Matrix a)
 {
   Matrix temp = *new Matrix(a.columns, a.rows);
   for (int row = 0; row < a.rows; row++)
@@ -122,21 +120,29 @@ void Matrix::multiply(Matrix a)
   }
 }
 
-
- Matrix Matrix:: multiply(Matrix a, Matrix b)
+Matrix Matrix::multiply(Matrix a, Matrix b)
 {
   Matrix temp = *new Matrix(a.rows, b.columns);
-  
-  for (int i = 0; i < temp.columns; i++){
 
-    for (int j = 0; j < temp.columns; j++)
+  if (a.columns != b.rows)
+  {
+    cout << "The matrices have different shapes";
+  }
+  else
+  {
+
+    for (int i = 0; i < temp.columns; i++)
     {
-      double sumNumber = 0;
-      for (int k = 0; k < a.columns;k++)
+
+      for (int j = 0; j < temp.columns; j++)
       {
-        sumNumber+=a.data[i][k]*b.data[k][j];
+        double sumNumber = 0;
+        for (int k = 0; k < a.columns; k++)
+        {
+          sumNumber += a.data[i][k] * b.data[k][j];
+        }
+        temp.data[i][j] = sumNumber;
       }
-      temp.data[i][j] = sumNumber;
     }
   }
   return temp;
