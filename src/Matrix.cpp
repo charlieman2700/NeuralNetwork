@@ -8,9 +8,14 @@
 #include "stdlib.h"
 #include "time.h"
 #include "cstdlib"
+#include "math.h"
 
 using namespace std;
 
+
+Matrix::Matrix() {
+  
+}
 // double initNeuron() { return ((double)rand()) / RAND_MAX; }
 Matrix::Matrix(int rows, int columns)
 {
@@ -22,8 +27,8 @@ Matrix::Matrix(int rows, int columns)
     this->data[rowIndex].resize(columns);
     for (int columnIndex = 0; columnIndex < columns; columnIndex++)
     {
-      // this->data[rowIndex][columnIndex] = -1 + (double)(rand()) / ((double)(RAND_MAX / (1 - -1)));
-      this->data[rowIndex][columnIndex] = 3;
+      this->data[rowIndex][columnIndex] = -1 + (double)(rand()) / ((double)(RAND_MAX / (1 - -1)));
+      //this->data[rowIndex][columnIndex] = 3;
     }
   }
   this->rows = rows;
@@ -58,7 +63,7 @@ void Matrix::addScalar(double scalar)
   }
 }
 
-void Matrix::addMatrix(Matrix matrix)
+void Matrix::addMatrix(Matrix &matrix)
 {
   if (this->columns != matrix.columns || this->rows != matrix.rows)
   {
@@ -76,7 +81,7 @@ void Matrix::addMatrix(Matrix matrix)
   }
 }
 
-Matrix Matrix::matrixSubstract(Matrix m1, Matrix m2)
+Matrix Matrix::matrixSubstract(Matrix &m1, Matrix &m2)
 {
   Matrix temp = *new Matrix(m1.rows, m1.columns);
   if (m1.columns != m2.columns || m1.rows != m2.rows)
@@ -96,7 +101,7 @@ Matrix Matrix::matrixSubstract(Matrix m1, Matrix m2)
   return temp;
 }
 
-Matrix Matrix::transpose(Matrix a)
+Matrix Matrix::transpose(Matrix &a)
 {
   Matrix temp = *new Matrix(a.columns, a.rows);
   for (int row = 0; row < a.rows; row++)
@@ -109,7 +114,18 @@ Matrix Matrix::transpose(Matrix a)
   return temp;
 }
 
-void Matrix::multiply(Matrix a)
+
+void Matrix::multiply(double scalar){
+  for (int row = 0; row < this->rows; row++)
+  {
+    for (int column = 0; column < this->columns; column++)
+    {
+      this->data[row][column] *= scalar;
+    }
+  }
+}
+
+void Matrix::multiply(Matrix &a)
 {
   for (int row = 0; row < a.rows; row++)
   {
@@ -120,7 +136,7 @@ void Matrix::multiply(Matrix a)
   }
 }
 
-Matrix Matrix::multiply(Matrix a, Matrix b)
+Matrix Matrix::multiply(Matrix &a, Matrix &b)
 {
   Matrix temp = *new Matrix(a.rows, b.columns);
 
@@ -130,19 +146,56 @@ Matrix Matrix::multiply(Matrix a, Matrix b)
   }
   else
   {
-
-    for (int i = 0; i < temp.columns; i++)
+    for (int rowIndex = 0; rowIndex < temp.rows; rowIndex++)
     {
-
-      for (int j = 0; j < temp.columns; j++)
+      for (int columnIndex = 0; columnIndex < temp.columns; columnIndex++)
       {
-        double sumNumber = 0;
+        double sum = 0;
         for (int k = 0; k < a.columns; k++)
         {
-          sumNumber += a.data[i][k] * b.data[k][j];
+          sum += a.data[rowIndex][k] * b.data[k][columnIndex];
         }
-        temp.data[i][j] = sumNumber;
+        temp.data[rowIndex][columnIndex] = sum;
       }
+    }
+  }
+  return temp;
+}
+
+//answer = pow(base, power);
+void Matrix:: sigmoid() {
+  for(int rowIndex=0 ; rowIndex < this->rows; rowIndex++)
+  {
+      for(int columnIndex= 0; columnIndex < this->columns;columnIndex++)
+          this->data[rowIndex][columnIndex] = 1/(1+exp(-this->data[rowIndex][columnIndex])); 
+  }    
+}
+
+
+
+Matrix Matrix::dsigmoid() {
+        Matrix *temp= new Matrix(this->rows, this->columns);
+        for(int rowIndex=0;rowIndex<rows;rowIndex++)
+        {
+            for(int columnIndex=0;columnIndex<this->columns;columnIndex++)
+                temp->data[rowIndex][columnIndex] = this->data[rowIndex][columnIndex] * (1-this->data[rowIndex][columnIndex]);
+        }
+        return *temp;
+}
+
+Matrix Matrix::fromArray(vector<double> values){
+  Matrix *temp = new Matrix(values.size(), 1);
+  for (int index = 0; index < values.size(); index++){
+    temp->data[index][0] = values[index];
+  }
+  return *temp;
+}
+
+vector<double> Matrix::toArray(){
+  vector<double> temp;
+  for (int row = 0; row < this->rows; row++){
+    for (int column =0 ; column < columns; column++){
+      temp.push_back(this->data[row][column]);
     }
   }
   return temp;
