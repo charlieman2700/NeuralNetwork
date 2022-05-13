@@ -7,19 +7,23 @@
     for learning purposes only.
 */
 
+#include <iostream>
 #include "NeuralNetwork.hpp"
 #include "time.h"
+#include <random>
+
 
 
 using namespace std;
 
 
-NeuralNetwork::NeuralNetwork(int inputLayer, int hiddenLayer, int outputLayer) {
-    this->weightsInputHiddenLayers  = *(new Matrix(hiddenLayer, inputLayer));
-    this->weightsHiddenOutputLayers = *(new Matrix(outputLayer, hiddenLayer));
+NeuralNetwork::NeuralNetwork(int inputLayer, int neuronCount, int outputLayer) {
+    this->weightsInputHiddenLayers  = *(new Matrix(neuronCount, inputLayer));
+    this->weightsHiddenOutputLayers = *(new Matrix(outputLayer, neuronCount));
     this->learningRate = 0.01;
 
-    this->biasHiddenLayer  = *(new Matrix(hiddenLayer, 1));
+
+    this->biasHiddenLayer  = *(new Matrix(neuronCount, 1));
     this->biasOutputLayer  = *(new Matrix(outputLayer, 1));
 
 }
@@ -122,10 +126,10 @@ void NeuralNetwork::train(vector<double> values, vector<double> expectedValues){
 }
 
 void NeuralNetwork::fit(vector<vector<double>> values, vector<vector<double>> expectedValues, int epochs){
-    srand(time(NULL));
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0,values.size()-1);
     for (int epoch = 0; epoch < epochs; epoch++){
-        //int sampleN = (int)(double)(rand()) / ((double)(RAND_MAX / (1 - -1)))
-        int sampleN = (int)rand()/RAND_MAX * values.size();
+        int sampleN = distribution(generator);;
         this->train(values[sampleN], expectedValues[sampleN]);
     }
 }

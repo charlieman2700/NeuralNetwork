@@ -1,10 +1,6 @@
-cmake_minimum_required(VERSION )
+cmake_minimum_required(VERSION 3.22)
+project(NeuralNetwork)
 
+set(CMAKE_CXX_STANDARD 14)
 
-PROJECT(NeuralNetwork)
-
-add_subdirectory(src)
-add_subdirectory(include)
-add_executable(${PROJECT_NAME} ${SRC_FILES})
-
-target_include_directories(${PROJECT_NAME} PRIVATE ${INC_DIRS})
+add_executable(NeuralNetwork main.cpp src/Matrix.cpp src/Matrix.hpp src/NeuralNetwork.cpp src/NeuralNetwork.hpp)
