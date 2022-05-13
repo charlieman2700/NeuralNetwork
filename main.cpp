@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <vector>
-#include "NeuralNetwork.hpp"
+#include "src/NeuralNetwork.hpp"
 
 
 using namespace std;
