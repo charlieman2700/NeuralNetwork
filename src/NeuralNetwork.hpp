@@ -1,29 +1,31 @@
-#ifndef NEURALNETWORK_H
-#define NEURALNETWORK_H
+//
+// Created by Charlie Solorzano  on 12/5/22.
+//
 
+#ifndef NEURALNETWORK_NEURALNETWORK_HPP
+#define NEURALNETWORK_NEURALNETWORK_HPP
+
+
+#include "Matrix.hpp"
 #include <vector>
-#include "Matrix.hpp";
 
-#pragma once
-using namespace std;
-
-class NeuralNetwork
-{
+class NeuralNetwork {
 public:
     Matrix weightsInputHiddenLayers, weightsHiddenOutputLayers,
             biasHiddenLayer, biasOutputLayer;
-    double  learningRate = 0.01; 
+
+    double learningRate;
 
     NeuralNetwork(int inputLayer, int hiddenLayer, int outputLayer);
 
-    ~NeuralNetwork();
+    virtual ~NeuralNetwork();
 
     vector<double> predict(vector<double> values);
 
     void train(vector<double> values, vector<double> expectedValues);
 
-    void fit(vector<vector<double>> values, vector<vector<double>> expectedValues, int epochs);
-
+    void fit(vector<vector<double> > values, vector<vector<double> > expectedValues, int epochs);
 };
 
-#endif
+
+#endif //NEURALNETWORK_NEURALNETWORK_HPP

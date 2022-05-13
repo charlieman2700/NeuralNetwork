@@ -1,3 +1,7 @@
+//
+// Created by Charlie Solorzano  on 12/5/22.
+//
+
 #include "NeuralNetwork.hpp"
 #include "time.h"
 
@@ -8,6 +12,7 @@ using namespace std;
 NeuralNetwork::NeuralNetwork(int inputLayer, int hiddenLayer, int outputLayer) {
     this->weightsInputHiddenLayers  = *(new Matrix(hiddenLayer, inputLayer));
     this->weightsHiddenOutputLayers = *(new Matrix(outputLayer, hiddenLayer));
+    this->learningRate = 0.01;
 
     this->biasHiddenLayer  = *(new Matrix(hiddenLayer, 1));
     this->biasOutputLayer  = *(new Matrix(outputLayer, 1));
@@ -16,12 +21,12 @@ NeuralNetwork::NeuralNetwork(int inputLayer, int hiddenLayer, int outputLayer) {
 
 
 NeuralNetwork::~NeuralNetwork() {
-   
+
 }
 
 vector<double> NeuralNetwork::predict(vector<double> values){
     Matrix input  = Matrix::fromArray(values);
-    Matrix hidden = Matrix::multiply(this->weightsInputHiddenLayers, input); 
+    Matrix hidden = Matrix::multiply(this->weightsInputHiddenLayers, input);
     hidden.addMatrix(this->biasHiddenLayer);
     hidden.sigmoid();
 
@@ -37,7 +42,7 @@ void NeuralNetwork::train(vector<double> values, vector<double> expectedValues){
 
     //________________________________________________________________________________________________
 
-                                                 // Primera Capa
+    // Primera Capa
 
     //________________________________________________________________________________________________
 
@@ -48,8 +53,8 @@ void NeuralNetwork::train(vector<double> values, vector<double> expectedValues){
     /
     */
     Matrix input  = Matrix::fromArray(values);
-    Matrix hidden = Matrix::multiply(this->weightsInputHiddenLayers, input); 
-    
+    Matrix hidden = Matrix::multiply(this->weightsInputHiddenLayers, input);
+
     // Le suma el bias al resultado de la multiplicacion
     hidden.addMatrix(this->biasHiddenLayer);
     // Le aplica la funcion de activacion al resultado obtenido
@@ -57,7 +62,7 @@ void NeuralNetwork::train(vector<double> values, vector<double> expectedValues){
 
     //________________________________________________________________________________________________
 
-                                                 // Segunda capa
+    // Segunda capa
 
     //________________________________________________________________________________________________
 
@@ -105,7 +110,7 @@ void NeuralNetwork::train(vector<double> values, vector<double> expectedValues){
 
     Matrix inputTransposed = Matrix::transpose(input);
     Matrix weightsInputHiddenLayersDelta = Matrix::multiply(hiddenLayerGradient, inputTransposed);
-    
+
     // Almacena los valores en la matriz de pesos inicial corregida
     weightsInputHiddenLayers.addMatrix(weightsInputHiddenLayersDelta);
     this->biasHiddenLayer.addMatrix(hiddenLayerGradient);
@@ -119,4 +124,3 @@ void NeuralNetwork::fit(vector<vector<double>> values, vector<vector<double>> ex
         this->train(values[sampleN], expectedValues[sampleN]);
     }
 }
-  
