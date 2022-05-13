@@ -1,6 +1,15 @@
+/*
+    Created by Josef Ruzicka, Carlos Solorzano and Javier Molina.
+    12/5/22.
+
+    This code is adapted from the one shown in the following tutorial:
+    https://towardsdatascience.com/understanding-and-implementing-neural-networks-in-java-from-scratch-61421bb6352c
+    for learning purposes only.
+*/
+
 #include <iostream>
 #include <vector>
-#include "src/NeuralNetwork.hpp"
+#include "NeuralNetwork.hpp"
 
 
 using namespace std;

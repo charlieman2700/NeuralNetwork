@@ -1,11 +1,12 @@
-//
-// Created by Charlie Solorzano  on 12/5/22.
-//
-
 /*
-  This code was based on the one presented in the following tutorial:
-  https://towardsdatascience.com/understanding-and-implementing-neural-networks-in-java-from-scratch-61421bb6352c
+    Created by Josef Ruzicka, Carlos Solorzano and Javier Molina.
+    12/5/22.
+
+    This code is adapted from the one shown in the following tutorial:
+    https://towardsdatascience.com/understanding-and-implementing-neural-networks-in-java-from-scratch-61421bb6352c
+    for learning purposes only.
 */
+
 #include "Matrix.hpp"
 
 #include <vector>

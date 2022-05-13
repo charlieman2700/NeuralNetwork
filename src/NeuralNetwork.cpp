@@ -1,6 +1,11 @@
-//
-// Created by Charlie Solorzano  on 12/5/22.
-//
+/*
+    Created by Josef Ruzicka, Carlos Solorzano and Javier Molina.
+    12/5/22.
+
+    This code is adapted from the one shown in the following tutorial:
+    https://towardsdatascience.com/understanding-and-implementing-neural-networks-in-java-from-scratch-61421bb6352c
+    for learning purposes only.
+*/
 
 #include "NeuralNetwork.hpp"
 #include "time.h"
