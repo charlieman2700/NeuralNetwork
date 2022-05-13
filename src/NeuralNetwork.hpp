@@ -16,7 +16,7 @@ public:
 
     double learningRate;
 
-    NeuralNetwork(int inputLayer, int hiddenLayer, int outputLayer);
+    NeuralNetwork(int inputLayer, int neuronCount, int outputLayer);
 
     virtual ~NeuralNetwork();
 
