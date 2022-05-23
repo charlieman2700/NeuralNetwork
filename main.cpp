@@ -1,12 +1,3 @@
-/*
-    Created by Josef Ruzicka, Carlos Solorzano and Javier Molina.
-    12/5/22.
-
-    This code is adapted from the one shown in the following tutorial:
-    https://towardsdatascience.com/understanding-and-implementing-neural-networks-in-java-from-scratch-61421bb6352c
-    for learning purposes only.
-*/
-
 #include <iostream>
 #include <vector>
 #include "src/NeuralNetwork.hpp"
@@ -43,7 +34,7 @@ int main()
 
     };
 
-
+    int array[3,5.7];
 
     NeuralNetwork *neuralNetwork = new NeuralNetwork(3,100,1);
     vector<double> output;
@@ -62,7 +53,12 @@ int main()
 
     }
     for (auto i:output) {
-        cout<<i << endl;
+        if (i>0.5){
+            cout<< 1<<endl;
+        }
+        else{
+            cout<< 0<< endl;
+        }
     }
 
 

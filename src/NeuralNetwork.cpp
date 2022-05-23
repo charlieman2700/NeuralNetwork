@@ -1,16 +1,11 @@
-/*
-    Created by Josef Ruzicka, Carlos Solorzano and Javier Molina.
-    12/5/22.
-
-    This code is adapted from the one shown in the following tutorial:
-    https://towardsdatascience.com/understanding-and-implementing-neural-networks-in-java-from-scratch-61421bb6352c
-    for learning purposes only.
-*/
+//
+// Created by Charlie Solorzano  on 12/5/22.
+//
 
 #include <iostream>
 #include "NeuralNetwork.hpp"
-#include "time.h"
 #include <random>
+
 
 
 
@@ -19,6 +14,7 @@ using namespace std;
 
 NeuralNetwork::NeuralNetwork(int inputLayer, int neuronCount, int outputLayer) {
     this->weightsInputHiddenLayers  = *(new Matrix(neuronCount, inputLayer));
+
     this->weightsHiddenOutputLayers = *(new Matrix(outputLayer, neuronCount));
     this->learningRate = 0.01;
 
@@ -34,10 +30,17 @@ NeuralNetwork::~NeuralNetwork() {
 }
 
 vector<double> NeuralNetwork::predict(vector<double> values){
-    Matrix input  = Matrix::fromArray(values);
-    Matrix hidden = Matrix::multiply(this->weightsInputHiddenLayers, input);
-    hidden.addMatrix(this->biasHiddenLayer);
+    Matrix input  = Matrix::fromArray(values); // Queda una matriz con una sola columna
+
+    Matrix hidden = Matrix::multiply(this->weightsInputHiddenLayers, input); // Explicacion debajo
+    /*
+     * Queda una matriz con las filas de weights input hidden layer =  neuron count y las columnas de input = 1
+     */
+    hidden.addMatrix(this->biasHiddenLayer); // Se le suman los bias al matriz anterior
     hidden.sigmoid();
+
+    //2 Capa
+    // Hidden tiene almacenado el resultado final de esta capa
 
     Matrix output = Matrix::multiply(this->weightsHiddenOutputLayers, hidden);
     output.addMatrix(this->biasOutputLayer);
@@ -45,6 +48,47 @@ vector<double> NeuralNetwork::predict(vector<double> values){
 
     return output.toArray();
 }
+
+
+
+
+
+
+
+void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOutputValue){
+    Matrix input  = Matrix::fromArray(entrada); //columna
+    Matrix inputForLayer  = Matrix::fromArray(entrada); //columna
+
+    vector<int> neuronasPorCapa = {4,5,6};
+    vector<Matrix> biases;
+    vector<Matrix> capas;
+    int inputCount = entrada.size();
+
+    //Creacion de pesos aleatorios y biases para una red de 3 capas
+    for (int indexCapa = 0; indexCapa < 3; ++indexCapa){
+        capas.push_back(*(new Matrix( neuronasPorCapa[indexCapa] , inputCount)));
+        biases.push_back(*(new Matrix( neuronasPorCapa[indexCapa] , 1)));
+        inputCount = neuronasPorCapa[indexCapa];
+    }
+
+    // Forward propagation de 3 capas
+    for (int indexCapa = 0; indexCapa < 3; ++indexCapa) {
+
+         Matrix tempResults = Matrix::multiply(capas[indexCapa], inputForLayer);
+         tempResults.addMatrix(biases[indexCapa]);
+         tempResults.sigmoid();
+         inputForLayer = tempResults;
+    }
+
+
+}
+
+
+
+
+
+
+
 
 void NeuralNetwork::train(vector<double> values, vector<double> expectedValues){
 
@@ -61,7 +105,7 @@ void NeuralNetwork::train(vector<double> values, vector<double> expectedValues){
     / entre el valor de cada entrada por los pesos de cada matriz
     /
     */
-    Matrix input  = Matrix::fromArray(values);
+    Matrix input  = Matrix::fromArray(values); //columna
     Matrix hidden = Matrix::multiply(this->weightsInputHiddenLayers, input);
 
     // Le suma el bias al resultado de la multiplicacion
