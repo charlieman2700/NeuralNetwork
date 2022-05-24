@@ -75,7 +75,7 @@ void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOu
     // for (int epoch = 0; epoch < 5000; ++epoch) {
 
         // Forward propagation de 3 capas
-        for (int indexCapa = 3; indexCapa > 0; --indexCapa) {
+        for (int indexCapa = 0; indexCapa < 3; ++indexCapa) {
 
              Matrix tempResults = Matrix::multiply(capas[indexCapa], inputForLayer);
              tempResults.addMatrix(biases[indexCapa]);
@@ -87,7 +87,7 @@ void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOu
     
         // Calcular error en última capa y ajustar gradiente.
     
-        // for (int indexCapa = 0; indexCapa < 3; ++indexCapa) {
+	// for (int indexCapa = 3; indexCapa > 0; --indexCapa) {
         //	backPropagation
         //}
     
