@@ -71,15 +71,27 @@ void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOu
         inputCount = neuronasPorCapa[indexCapa];
     }
 
-    // Forward propagation de 3 capas
-    for (int indexCapa = 0; indexCapa < 3; ++indexCapa) {
+    // Training.
+    // for (int epoch = 0; epoch < 5000; ++epoch) {
 
-         Matrix tempResults = Matrix::multiply(capas[indexCapa], inputForLayer);
-         tempResults.addMatrix(biases[indexCapa]);
-         tempResults.sigmoid();
-         inputForLayer = tempResults;
-    }
+        // Forward propagation de 3 capas
+        for (int indexCapa = 3; indexCapa > 0; --indexCapa) {
 
+             Matrix tempResults = Matrix::multiply(capas[indexCapa], inputForLayer);
+             tempResults.addMatrix(biases[indexCapa]);
+             tempResults.sigmoid();
+             inputForLayer = tempResults;
+
+	 
+        }
+    
+        // Calcular error en última capa y ajustar gradiente.
+    
+        // for (int indexCapa = 0; indexCapa < 3; ++indexCapa) {
+        //	backPropagation
+        //}
+    
+    //}
 
 }
 
