@@ -34,32 +34,34 @@ int main()
 
     };
 
-    int array[3,5.7];
+
 
     NeuralNetwork *neuralNetwork = new NeuralNetwork(3,100,1);
+
+    neuralNetwork->trainNuevo(values[0],expectedValues[0]);
     vector<double> output;
-
-    neuralNetwork->fit(values, expectedValues, 50000);
-
-
-
-    vector<vector<double>> input {
-            vector<double>{0,0}, {0,1}, {1,0}, {1,1}
-    };
-
-    for(auto value : values)
-    {
-       output.push_back( neuralNetwork->predict(value)[0]);
-
-    }
-    for (auto i:output) {
-        if (i>0.5){
-            cout<< 1<<endl;
-        }
-        else{
-            cout<< 0<< endl;
-        }
-    }
-
+//
+//    neuralNetwork->fit(values, expectedValues, 50000);
+//
+//
+//
+//    vector<vector<double>> input {
+//            vector<double>{0,0}, {0,1}, {1,0}, {1,1}
+//    };
+//
+//    for(auto value : values)
+//    {
+//       output.push_back( neuralNetwork->predict(value)[0]);
+//
+//    }
+//    for (auto i:output) {
+//        if (i>0.5){
+//            cout<< 1<<endl;
+//        }
+//        else{
+//            cout<< 0<< endl;
+//        }
+//    }
+//
 
 }

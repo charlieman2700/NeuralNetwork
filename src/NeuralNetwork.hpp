@@ -11,7 +11,7 @@
 
 class NeuralNetwork {
 public:
-    Matrix weightsInputHiddenLayers, weightsHiddenOutputLayers,
+        Matrix weightsInputHiddenLayers, weightsHiddenOutputLayers,
             biasHiddenLayer, biasOutputLayer;
 
     double learningRate;
