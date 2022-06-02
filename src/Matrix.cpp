@@ -71,7 +71,7 @@ void Matrix::addMatrix(Matrix &matrix)
 {
     if (this->columns != matrix.columns || this->rows != matrix.rows)
     {
-        cout << "The matrices have different shapes";
+        cout << "The matrices have different shapes ADDMATRIX" << endl;
     }
     else
     {
@@ -90,7 +90,7 @@ Matrix Matrix::matrixSubstract(Matrix &m1, Matrix &m2)
     Matrix temp = *new Matrix(m1.rows, m1.columns);
     if (m1.columns != m2.columns || m1.rows != m2.rows)
     {
-        cout << "The matrices have different shapes";
+        cout << "The matrices have different shapes MATRIXSUBSTRACT" << endl;
     }
     else
     {
@@ -146,7 +146,7 @@ Matrix Matrix::multiply(Matrix &a, Matrix &b)
 
     if (a.columns != b.rows)
     {
-        cout << "The matrices have different shapes";
+        cout << "The matrices have different shapes MATRIXMULTIPLY" << endl;
     }
     else
     {

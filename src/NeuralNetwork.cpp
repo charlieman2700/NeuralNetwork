@@ -79,40 +79,43 @@ void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOu
         inputCount = neuronasPorCapa[indexCapa];
     }
     //Ultimo set de pesos
-    pesos.push_back(*(new Matrix(outputLayer , neuronasPorCapa[-1])));
-    biases.push_back(*(new Matrix( neuronasPorCapa[-1] , 1)));
+    pesos.push_back(*(new Matrix(outputLayer , neuronasPorCapa[neuronasPorCapa.size()-1])));
+    biases.push_back(*(new Matrix( neuronasPorCapa[neuronasPorCapa.size()-1] , 1)));
 
 
 
     // Training.
-    // for (int epoch = 0; epoch < 5000; ++epoch) {
+     //for (int epoch = 0; epoch < 5000; ++epoch) {
 
         // Forward propagation de 3 pesos
         for (int indexPeso = 0; indexPeso < setDePesos; ++indexPeso) {
 
              Matrix tempResults = Matrix::multiply(pesos[indexPeso], inputForLayer);
-             tempResults.addMatrix(biases[indexPeso]);
+             //tempResults.printMatrix();
+             //tempResults.addMatrix(biases[indexPeso]);
+             tempResults.addScalar(biases[indexPeso].toArray()[0]);
+             //tempResults.printMatrix();
              tempResults.sigmoid();
              layerOutputs.push_back(tempResults);
              inputForLayer = tempResults;
         }
-    networkOutput = inputForLayer;
+        networkOutput = inputForLayer;
 
-    // Calcular error en última capa y ajustar gradiente. layer[layersCount-2
-    error    = Matrix::matrixSubstract(target, networkOutput/* Epoch Output */); // Crea la matriz error : Calculando el error de todos los output de nuestra red
+        // Calcular error en última capa y ajustar gradiente. layer[layersCount-2
+        error    = Matrix::matrixSubstract(target, networkOutput/* Epoch Output */); // Crea la matriz error : Calculando el error de todos los output de nuestra red
 
-    gradient = networkOutput.dsigmoid(); // Obtiene la gradiente de la derivada de la funcion de activacion
-    gradient.multiply(error);           // Multiplica la gradiente por la matriz del error y almacena en la matriz gradiente
-    gradient.multiply(this->learningRate); // Multiplica los resultados anteriores por el valor de la tasa de aprendizaje
+        gradient = networkOutput.dsigmoid(); // Obtiene la gradiente de la derivada de la funcion de activacion
+        gradient.multiply(error);           // Multiplica la gradiente por la matriz del error y almacena en la matriz gradiente
+        gradient.multiply(this->learningRate); // Multiplica los resultados anteriores por el valor de la tasa de aprendizaje
 
-    //transponer el output de la capa anterior
-    Matrix previousLayerOutputTransposed = Matrix::transpose(layerOutputs[setDePesos - 2]);
-    //Multiplica la gradiente por la transpuesta
-    Matrix weightsPreviousLayerOutputDelta = Matrix::multiply(gradient, previousLayerOutputTransposed);
+        //transponer el output de la capa anterior
+        Matrix previousLayerOutputTransposed = Matrix::transpose(layerOutputs[setDePesos - 2]);
+        //Multiplica la gradiente por la transpuesta
+        Matrix weightsPreviousLayerOutputDelta = Matrix::multiply(gradient, previousLayerOutputTransposed);
+        //weightsPreviousLayerOutputDelta.printMatrix();
 
-    pesos[-1].addMatrix(weightsPreviousLayerOutputDelta);
-    biases[-1].addMatrix(gradient);
-
+    pesos[pesos.size()-1].addMatrix(weightsPreviousLayerOutputDelta);
+    biases[biases.size()-1].addScalar(gradient.toArray()[0]);
 
     Matrix weightsNextLayer = pesos[setDePesos - 1];
     Matrix weightsNextLayerTransposed;
@@ -125,7 +128,10 @@ void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOu
         //Sumar los pesos de la capa con el delta
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         weightsNextLayerTransposed = Matrix::transpose(weightsNextLayer);
+        weightsNextLayerTransposed.printMatrix();
+        error.printMatrix();
         hiddenLayerErrors = Matrix::multiply(weightsNextLayerTransposed, error);
+        hiddenLayerErrors.printMatrix();
 
         layerGradient = layerOutputs[indexCapa].dsigmoid();
         layerGradient.multiply(hiddenLayerErrors);
@@ -133,10 +139,11 @@ void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOu
 
         previousLayerOutputTransposed = Matrix::transpose(layerOutputs[indexCapa-1]);
         weightsPreviousLayerDelta = Matrix::multiply(layerGradient, previousLayerOutputTransposed);
+        weightsPreviousLayerDelta.printMatrix();
 
         // Almacena los valores en la matriz de pesos inicial corregida
         pesos[indexCapa].addMatrix(weightsPreviousLayerDelta);
-        biases[indexCapa].addMatrix(layerGradient);
+        biases[indexCapa].addScalar(layerGradient.toArray()[0]);
 
         weightsNextLayer = pesos[indexCapa];
         //Matrix inputTransposed = Matrix::transpose(input);
@@ -148,10 +155,13 @@ void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOu
     }
 
     weightsNextLayerTransposed = Matrix::transpose(weightsNextLayer);
-    hiddenLayerErrors = Matrix::multiply(weightsNextLayerTransposed, error);
+    //hiddenLayerErrors = Matrix::multiply(weightsNextLayerTransposed, error);
+    //hiddenLayerErrors =
+    weightsNextLayerTransposed.multiply(error.toArray()[0]);
+    hiddenLayerErrors.printMatrix();
 
     layerGradient = layerOutputs[0].dsigmoid();
-    layerGradient.multiply(hiddenLayerErrors);
+    layerGradient.multiply(/*hiddenLayerErrors*/ weightsNextLayerTransposed);
     layerGradient.multiply(this->learningRate);
 
     previousLayerOutputTransposed = Matrix::transpose(input);
@@ -161,12 +171,6 @@ void NeuralNetwork::trainNuevo(vector<double> entrada, vector<double> expectedOu
     pesos[0].addMatrix(weightsPreviousLayerDelta);
     biases[0].addMatrix(layerGradient);
 }
-
-
-
-
-
-
 
 
 void NeuralNetwork::train(vector<double> values, vector<double> expectedValues){
