@@ -16,9 +16,10 @@
 
 using namespace std;
 
-
-Matrix::Matrix() {
-
+Matrix::Matrix()
+{
+    this->rows = 0;
+    this->columns = 0;
 }
 // double initNeuron() { return ((double)rand()) / RAND_MAX; }
 Matrix::Matrix(int rows, int columns)
@@ -32,7 +33,7 @@ Matrix::Matrix(int rows, int columns)
         for (int columnIndex = 0; columnIndex < columns; columnIndex++)
         {
             this->data[rowIndex][columnIndex] = -1 + (double)(rand()) / ((double)(RAND_MAX / (1 - -1)));
-            //this->data[rowIndex][columnIndex] = 3;
+            // this->data[rowIndex][columnIndex] = 3;
         }
     }
     this->rows = rows;
@@ -87,7 +88,7 @@ void Matrix::addMatrix(Matrix &matrix)
 
 Matrix Matrix::matrixSubstract(Matrix &m1, Matrix &m2)
 {
-    Matrix temp = *new Matrix(m1.rows, m1.columns);
+    Matrix temp = Matrix(m1.rows, m1.columns);
     if (m1.columns != m2.columns || m1.rows != m2.rows)
     {
         cout << "The matrices have different shapes MATRIXSUBSTRACT" << endl;
@@ -107,7 +108,7 @@ Matrix Matrix::matrixSubstract(Matrix &m1, Matrix &m2)
 
 Matrix Matrix::transpose(Matrix &a)
 {
-    Matrix temp = *new Matrix(a.columns, a.rows);
+    Matrix temp = Matrix(a.columns, a.rows);
     for (int row = 0; row < a.rows; row++)
     {
         for (int column = 0; column < a.columns; column++)
@@ -118,8 +119,8 @@ Matrix Matrix::transpose(Matrix &a)
     return temp;
 }
 
-
-void Matrix::multiply(double scalar){
+void Matrix::multiply(double scalar)
+{
     for (int row = 0; row < this->rows; row++)
     {
         for (int column = 0; column < this->columns; column++)
@@ -135,14 +136,14 @@ void Matrix::multiply(Matrix &a)
     {
         for (int column = 0; column < a.columns; column++)
         {
-            this->data[row][column] *= a.data[row][column];
+            this->data[row][column] = this->data[row][column] * a.data[row][column];
         }
     }
 }
 
 Matrix Matrix::multiply(Matrix &a, Matrix &b)
 {
-    Matrix temp = *new Matrix(a.rows, b.columns);
+    Matrix temp = Matrix(a.rows, b.columns);
 
     if (a.columns != b.rows)
     {
@@ -166,42 +167,48 @@ Matrix Matrix::multiply(Matrix &a, Matrix &b)
     return temp;
 }
 
-//answer = pow(base, power);
-void Matrix:: sigmoid() {
-    for(int rowIndex=0 ; rowIndex < this->rows; rowIndex++)
+// answer = pow(base, power);
+void Matrix::sigmoid()
+{
+    for (int rowIndex = 0; rowIndex < this->rows; rowIndex++)
     {
-        for(int columnIndex= 0; columnIndex < this->columns;columnIndex++)
-            this->data[rowIndex][columnIndex] = 1/(1+exp(-this->data[rowIndex][columnIndex]));
+        for (int columnIndex = 0; columnIndex < this->columns; columnIndex++)
+            this->data[rowIndex][columnIndex] = 1 / (1 + exp(-this->data[rowIndex][columnIndex]));
     }
 }
 
-
-
-Matrix Matrix::dsigmoid() {
-    Matrix *temp= new Matrix(this->rows, this->columns);
-    for(int rowIndex=0;rowIndex<rows;rowIndex++)
+Matrix Matrix::dsigmoid()
+{
+    Matrix temp = Matrix(this->rows, this->columns);
+    for (int rowIndex = 0; rowIndex < rows; rowIndex++)
     {
-        for(int columnIndex=0;columnIndex<this->columns;columnIndex++)
-            temp->data[rowIndex][columnIndex] = this->data[rowIndex][columnIndex] * (1-this->data[rowIndex][columnIndex]);
-    }
-    return *temp;
-}
-
-Matrix Matrix::fromArray(vector<double> values){
-    Matrix *temp = new Matrix(values.size(), 1);
-    for (int index = 0; index < values.size(); index++){
-        temp->data[index][0] = values[index];
-    }
-    return *temp;
-}
-
-vector<double> Matrix::toArray(){
-    vector<double> temp;
-    for (int row = 0; row < this->rows; row++){
-        for (int column =0 ; column < columns; column++){
-            temp.push_back(this->data[row][column]);
+        for (int columnIndex = 0; columnIndex < this->columns; columnIndex++)
+        {
+            temp.data[rowIndex][columnIndex] = this->data[rowIndex][columnIndex] * (1 - this->data[rowIndex][columnIndex]);
         }
     }
     return temp;
 }
 
+Matrix Matrix::fromArray(vector<double> values)
+{
+    Matrix temp = Matrix(int(values.size()), 1);
+    for (int index = 0; index < values.size(); index++)
+    {
+        temp.data[index][0] = values[index];
+    }
+    return temp;
+}
+
+vector<double> Matrix::toArray()
+{
+    vector<double> temp;
+    for (int row = 0; row < this->rows; row++)
+    {
+        for (int column = 0; column < columns; column++)
+        {
+            temp.push_back(this->data[row][column]);
+        }
+    }
+    return temp;
+}

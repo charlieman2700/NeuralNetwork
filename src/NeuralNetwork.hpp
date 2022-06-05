@@ -5,18 +5,19 @@
 #ifndef NEURALNETWORK_NEURALNETWORK_HPP
 #define NEURALNETWORK_NEURALNETWORK_HPP
 
-
 #include "Matrix.hpp"
 #include <vector>
 
-class NeuralNetwork {
+class NeuralNetwork
+{
 public:
-        Matrix weightsInputHiddenLayers, weightsHiddenOutputLayers,
-            biasHiddenLayer, biasOutputLayer;
-
+    vector<int> neuronCountPerLayer;
+    vector<Matrix> biases;
+    vector<Matrix> pesos;
+    vector<Matrix> layerOutputs;
     double learningRate;
 
-    NeuralNetwork(int inputLayer, int neuronCount, int outputLayer);
+    NeuralNetwork(vector<int> neuronCountPerLayer);
 
     virtual ~NeuralNetwork();
 
@@ -25,10 +26,7 @@ public:
     void train(vector<double> values, vector<double> expectedValues);
     void trainNuevo(vector<double> values, vector<double> expectedValues);
 
-
-
-    void fit(vector<vector<double> > values, vector<vector<double> > expectedValues, int epochs);
+    void fit(vector<vector<double>> values, vector<vector<double>> expectedValues, int epochs);
 };
 
-
-#endif //NEURALNETWORK_NEURALNETWORK_HPP
+#endif // NEURALNETWORK_NEURALNETWORK_HPP

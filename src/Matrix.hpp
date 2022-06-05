@@ -26,11 +26,11 @@ public:
     void sigmoid();
     void addScalar(double scalar);
     void addMatrix(Matrix& matrix);
-    static Matrix matrixSubstract(Matrix &m1, Matrix& m2);
+    static Matrix matrixSubstract(Matrix& m1, Matrix& m2);
     void multiply(Matrix& a);
     void multiply(double scalar);
     static Matrix transpose(Matrix& a);
-    static Matrix multiply(Matrix &a, Matrix &b);
+    static Matrix multiply(Matrix& a, Matrix& b);
     static Matrix fromArray(vector<double> values);
     vector<double> toArray();
     Matrix dsigmoid();
